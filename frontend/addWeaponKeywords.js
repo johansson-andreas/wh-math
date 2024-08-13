@@ -1,4 +1,4 @@
-const keywords = (keyword, weapon) => {
+const addWeaponKeyword = (keyword, weapon) => {
     // Create a copy of the weapon object to avoid mutating the original
     const updatedWeapon = { ...weapon };
 
@@ -11,7 +11,7 @@ const keywords = (keyword, weapon) => {
     }
 
     const keywordName = match[1].trim();
-    const keywordNumber = parseInt(match[2], 10) || 0;
+    const keywordNumber = parseInt(match[2], 10) || 1;
 
     // Sanitize property name by removing non-alphabetic characters and converting to camel case
     const sanitizePropertyName = (name) => {
@@ -31,10 +31,10 @@ const keywords = (keyword, weapon) => {
 
 // Example usage
 const weapon = { antiInfantry: 0, antiVehicle: 0, antiMonster: 0 };
-const updatedWeapon = keywords('anti-vehicle/5', weapon);
+const updatedWeapon = addWeaponKeyword('anti-vehicle/5', weapon);
 console.log(updatedWeapon); // Output: { antiInfantry: 0, antiVehicle: 5, antiMonster: 0 }
 
 // Test with a new property
 const newWeapon = { antiInfantry: 0 };
-const updatedNewWeapon = keywords('anti-aircraft/7', newWeapon);
+const updatedNewWeapon = addWeaponKeyword('anti-aircraft/7', newWeapon);
 console.log(updatedNewWeapon); // Output: { antiInfantry: 0, antiAircraft: 7 }
