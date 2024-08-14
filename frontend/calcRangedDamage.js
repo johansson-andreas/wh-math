@@ -62,7 +62,7 @@ const woundRolls = (weapon, defender, hits) => {
             for (let a = 0; a < hits; a++)
                 {
                     const roll = rollDie();
-                    if(roll == 6) { woundRolls++; criticalHits++}
+                    if(roll == 6) { woundRolls++}
                     else if(roll == 1) { /*TODO: REROLL 1s */ }
                     else if (roll >= rollToWound) {
                         woundRolls++;
@@ -77,23 +77,16 @@ const woundRolls = (weapon, defender, hits) => {
 
 const saveRolls = (weapon, defender, wounds) => {
     let damage = 0;
-    //WOUND ROLLS
-    let rollToWound = 0;
-    if(weapon.strength > (defender.toughness * 2)) rollToWound = 2;
-    else if(weapon.strength > (defender.toughness)) rollToWound = 3;
-    else if(weapon.strength == (defender.toughness)) rollToWound = 4;
-    else if(weapon.strength < (defender.toughness)) rollToWound = 5;
-    else if((weapon.strength*2) < (defender.toughness)) rollToWound = 6;
 
-    for (let a = 0; a < hits; a++)
+    const rollToSave = Math.min([(defender.save + weapon.armorPenetration), defender.invulnerableSave]);
+
+    for (let a = 0; a < wounds; a++)
         {
             const roll = rollDie();
-            if(roll == 6) { woundRolls++; criticalHits++}
-            else if(roll == 1) { /*TODO: REROLL 1s */ }
-            else if (roll >= rollToWound) {
-                woundRolls++;
+            if(roll == 1) { damage += weapon.damage }
+            else if (roll <= rollToSave) {
+                damage += weapon.damage;
             }
-            //REROLL ALL WOUNDS 
             else {
 
             }
