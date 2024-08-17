@@ -1,9 +1,9 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import RangedWeaponForm from './Forms/RangedWeaponForm';
-import MeleeWeaponForm from './Forms/MeleeWeaponForm';
-import UnitForm from './Forms/UnitForm'
-import UnitWeaponLinkForm from './Forms/UnitWeaponLinkForm'
+import RangedWeaponForm from '../components/Forms/RangedWeaponForm';
+import MeleeWeaponForm from '../components/Forms/MeleeWeaponForm';
+import UnitForm from '../components/Forms/UnitForm'
+import UnitWeaponLinkForm from '../components/Forms/UnitWeaponLinkForm'
 
 const AddNewDataComponent = () => {
 

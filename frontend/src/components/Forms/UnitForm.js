@@ -53,7 +53,6 @@ const UnitForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your submit logic here, such as making an API call
     console.log(formData)
     const response = await axios.post(`http://localhost:5000/api/factions/${formData.faction}/unit`, { formData })
     console.log(response.data);

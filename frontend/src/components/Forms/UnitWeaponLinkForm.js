@@ -3,18 +3,22 @@ import axios from 'axios';
 import styles from './UnitWeaponLink.module.css'
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Button } from 'react-bootstrap';
+import FactionDropDown from '../FactionUnitDropDown';
+import UnitList from '../UnitList';
 
 const UnitWeaponLinkForm = () => {
   const [meleeWeaponData, setMeleeWeaponData] = useState([]);
   const [rangedWeaponData, setRangedWeaponData] = useState([]);
   const [unitList, setUnitList] = useState([]);
   const [factionList, setFactionList] = useState([])
+  const [pointCost, setPointCost] = useState(0)
 
 
-  const [selectedMeleeWeapons, setSelectedMeleeWeapons] = useState([]);
-  const [selectedRangedWeapons, setSelectedRangedWeapons] = useState([]);
+  const [selectedMeleeWeapons, setSelectedMeleeWeapons] = useState(new Set());
+  const [selectedRangedWeapons, setSelectedRangedWeapons] = useState(new Set());
   const [selectedUnit, setSelectedUnit] = useState('')
   const [selectedFaction, setSelectedFaction] = useState('')
+  const [responseMessage, setResponseMessage] = useState('')
 
 
 
@@ -36,139 +40,102 @@ const UnitWeaponLinkForm = () => {
     } catch (error) {
       console.log(error)
     }
-    try {
-      console.log('getting factionlist')
-      const response = await axios.get('http://localhost:5000/api/factions');
-      console.log(response.data);
-      setFactionList(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-
-
   };
 
-  const getFactionUnitList = async (faction) => {
-    try {
-      setSelectedFaction(faction.faction)
-      const response = await axios.get(`http://localhost:5000/api/factions/${faction.faction}/unit`);
-      console.log(response)
-      setUnitList(response.data.factionUnitList)
-    } catch (error) {
-      console.log(error)
-    }
+  const handleMeleeSelection = (meleeWeapon) => {
+    setSelectedMeleeWeapons(prevSet => {
+      const newSet = new Set(prevSet);
+      if (newSet.has(meleeWeapon)) {
+        newSet.delete(meleeWeapon);
+      } else {
+        newSet.add(meleeWeapon);
+      }
+      return newSet
+    });
+  };
+
+  const handleRangedSelection = (rangedName) => {
+    setSelectedRangedWeapons(prevSet => {
+      const newSet = new Set(prevSet);
+      if (newSet.has(rangedName)) {
+        newSet.delete(rangedName);
+      } else {
+        newSet.add(rangedName);
+      }
+      return newSet
+    });
+  };
+
+  const handleCostChange = (event) => {
+    setPointCost(event.target.value)
   }
-
-  const handleMeleeClick = (event) => {
-    const { target } = event;
-    if (target.tagName === 'OPTION') {
-      const value = target.value;
-      setSelectedMeleeWeapons(prevSelected => {
-        const newSelected = [...prevSelected];
-        if (newSelected.includes(value)) {
-          return newSelected.filter(item => item !== value);
-        } else {
-          return [...newSelected, value];
-        }
-      });
-      target.selected = !target.selected;
-    }
-  };
-
-  const handleUnitChange = (e) => {
-    setSelectedUnit(e.target.value);
-  }
-
-  const handleRangedClick = (event) => {
-    const { target } = event;
-    if (target.tagName === 'OPTION') {
-      const value = target.value;
-      setSelectedRangedWeapons(prevSelected => {
-        const newSelected = [...prevSelected];
-        if (newSelected.includes(value)) {
-          return newSelected.filter(item => item !== value);
-        } else {
-          return [...newSelected, value];
-        }
-      });
-      target.selected = !target.selected;
-    }
-  };
 
   const linkWeaponUnit = async () => {
     console.log(selectedMeleeWeapons, selectedRangedWeapons, selectedUnit)
 
     const updatedWeaponList = {
       selectedMeleeWeapons,
-      selectedRangedWeapons
+      selectedRangedWeapons,
+      pointCost
     }
-
+    try{
     const response = await axios.put(`http://localhost:5000/api/factions/${selectedFaction}/unit/${selectedUnit}`, updatedWeaponList);
-
+ 
+    if (response.status === 200) {
+      setResponseMessage(response.data.message);
+    }
+  } catch (error) {
+    if (error.response) {
+      const status = error.response.status;
+      if (status === 404) {
+        setResponseMessage('Unit not found');
+      } else if (status === 500) {
+        setResponseMessage('An error occurred during the update');
+      } else {
+        setResponseMessage('An unexpected error occurred');
+      }
+    } else {
+      setResponseMessage('No response received or request setup error', error.message);
+    }
+  }
+    setSelectedMeleeWeapons(new Set())
+    setSelectedRangedWeapons(new Set())
+    setSelectedUnit('')
 
   }
-
-  useEffect(() => {
-  }, [selectedMeleeWeapons])
-
-  useEffect(() => {
-  }, [rangedWeaponData])
-
-  useEffect(() => {
-  }, [factionList])
-
   useEffect(() => {
     initializeData();
   }, []);
 
+
   return (
     <div className={styles.linkForm}>
 
-      <Dropdown className={styles.topButtons}>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          Faction List
+        <FactionDropDown setUnitList={setUnitList} setSelectedFaction={setSelectedFaction} className={styles.factionDropDown}/>
+        <Button variant="primary" onClick={() => linkWeaponUnit()} className={styles.factionDropDown}>Add</Button>
+        Points cost: <input type='number' onChange={handleCostChange} className={styles.factionDropDown}/>
 
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          {factionList && factionList.map(faction => (
-            <Dropdown.Item as="button" onClick={() => getFactionUnitList({faction})}>{faction}</Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-        <Button variant="primary" onClick={() => linkWeaponUnit()}>Add</Button>
-      </Dropdown>
       <div className={styles.dataDiv}>
-        <div className={styles.unitDiv}>
-          Unit List:
-          <select multiple value={selectedUnit} onChange={handleUnitChange} className={styles.unitSelect}>
-            {unitList && unitList.map(unit => (
-              <option value={unit.name} className={styles.rangedWeaponsEntry}>
-                {unit.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.weaponsDiv}>
-          <div className={styles.rangedWeaponsDiv}>
-            Melee Weapons:
-            <select multiple value={selectedMeleeWeapons} onClick={handleMeleeClick} className={styles.rangedWeaponsSelect}>
-              {meleeWeaponData && meleeWeaponData.map(meleeWeapon => (
-                <option value={meleeWeapon.name} className={styles.rangedWeaponsEntry}>
-                  {meleeWeapon.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <UnitList unitList={unitList} setSelectedUnit={setSelectedUnit} selectedUnit={selectedUnit}/>
           <div className={styles.rangedWeaponsDiv}>
             Ranged Weapons:
-            <select multiple value={selectedRangedWeapons} onClick={handleRangedClick} className={styles.rangedWeaponsSelect}>
+            <div className={styles.rangedWeaponList}>
               {rangedWeaponData && rangedWeaponData.map(rangedWeapon => (
-                <option value={rangedWeapon.name} className={styles.rangedWeaponsEntry}>
+                <div className={`${styles.rangedWeaponsEntry} ${selectedRangedWeapons.has(rangedWeapon.name) ? styles.selectedUnit : ''}`} onClick={() => handleRangedSelection(rangedWeapon.name)}>
                   {rangedWeapon.name}
-                </option>
+                </div>
               ))}
-            </select>
+            </div>
           </div>
+          <div className={styles.meleeWeaponDiv}>
+            Melee Weapons:
+            <div className={styles.meleeWeaponList}>
+              {meleeWeaponData && meleeWeaponData.map(meleeWeapon => (
+                <div className={`${styles.rangedWeaponsEntry} ${selectedMeleeWeapons.has(meleeWeapon.name) ? styles.selectedUnit : ''}`} onClick={() => handleMeleeSelection(meleeWeapon.name)}>
+                  {meleeWeapon.name}
+                </div>
+              ))}
+            </div>
         </div>
       </div>
     </div>

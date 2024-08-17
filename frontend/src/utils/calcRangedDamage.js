@@ -67,7 +67,7 @@ const woundRolls = (weapon, defender, hits) => {
                     else if (roll >= rollToWound) {
                         woundRolls++;
                     }
-                    //REROLL ALL WOUNDS 
+                    //TODO: REROLL ALL WOUNDS 
                     else {
 
                     }

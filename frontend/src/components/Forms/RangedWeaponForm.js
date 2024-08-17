@@ -67,7 +67,6 @@ const RangedWeaponForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your submit logic here, such as making an API call
     const response = await axios.post('http://localhost:5000/api/weapons/ranged', {formData})
     console.log(response.data);
   };

@@ -29,6 +29,9 @@ const unitSchema = new Schema({
   keywords: {
     type: Array
   },
+  points: {
+    type:Number
+  },
   meleeWeapons: [{ type: Schema.Types.ObjectId, ref: 'MeleeWeapon' }], // Array of MeleeWeapon references
   rangedWeapons: [{ type: Schema.Types.ObjectId, ref: 'RangedWeapon' }], // Array of RangedWeapon references
 });

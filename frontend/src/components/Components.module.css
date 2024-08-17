@@ -1,0 +1,33 @@
+
+.unitEntry
+{
+    line-height: normal;
+    font-size: smaller;
+    margin: 1px;
+    background-color:rgb(190, 214, 235) ;
+    border-radius: 10px;
+    padding: 3px;
+    height: 25px;
+    user-select: none;
+}
+
+.unitList {
+    padding: 3px;
+    min-width: 400px;
+    max-height: 70vh;
+    overflow: auto;
+    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    width:15%;
+    height: 100%;
+
+}
+.unitSelected
+{
+    background-color: rgb(146, 233, 47);
+}
+.dropDownMainDiv
+{
+    width: 100%;
+}

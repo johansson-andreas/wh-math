@@ -2,7 +2,6 @@
 {
     display: flex;
     flex-direction: column;
-    height: 75vh;
 }
 .weaponsDiv
 {
@@ -12,7 +11,13 @@
 .linkForm
 {
     height: 100%;
-}
+    display: grid;
+    grid-template-areas: 
+    "button button button"
+    "content content content";
+    grid-template-columns: repeat(20, min-content); 
+    grid-template-rows: auto 1fr; 
+}  
 .rangedWeaponsSelect
 {
     height: inherit;
@@ -20,7 +25,12 @@
 .rangedWeaponsEntry
 {
     line-height: normal;
-    font-size: smaller;
+    margin: 1px;
+    background-color:rgb(190, 214, 235) ;
+    border-radius: 10px;
+    padding: 3px;
+    height: 25px;
+    user-select: none;
 }
 .unitDiv {
     display: flex;
@@ -29,15 +39,25 @@
 }
 .dataDiv
 {
+    grid-area: content;
     display: flex;
 }
 .dataDiv > * > *
 {
     padding: 1%;
 }
+.selectedUnit
+{
+    background-color: rgb(96, 236, 150);
+}
 .dataDiv > *
 {
     padding: 1%;
+    min-width: 400px;
+    border: 1px solid black;
+    max-height: 70vh;
+    overflow: auto;
+    margin: 2px;
 }
 .unitSelect
 {
@@ -48,4 +68,8 @@
     display: flex;
     width: 50%;
     justify-content: space-between;
+}
+.factionDropDown
+{
+    width: 70px;
 }

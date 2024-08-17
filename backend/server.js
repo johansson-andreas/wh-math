@@ -36,7 +36,7 @@ app.get('/api', (req, res) => {
 });
 
 app.get('/api/weapons/ranged', async (req, res) => {
-  const weapons = await RangedWeapon.find().exec()
+  const weapons = await RangedWeapon.find().sort('name').exec()
   res.json({ weapons });
   console.log('sent ranged weapon data')
 });
@@ -70,7 +70,7 @@ app.post('/api/weapons/ranged', async (req, res) => {
 });
 
 app.get('/api/weapons/melee', async (req, res) => {
-  const weapons = await MeleeWeapon.find().exec()
+  const weapons = await MeleeWeapon.find().sort('name').exec()
   res.json({ weapons });
   console.log('sent melee weapon data')
 
@@ -136,7 +136,7 @@ app.get('/api/factions/:faction/unit', async (req, res) => {
   const factionName = req.params.faction;
   try {
 
-    const factionUnitList = await Unit.find({faction:factionName}).exec()
+    const factionUnitList = await Unit.find({faction:factionName}).sort('name').exec()
     console.log(req.params.faction)
     res.json({ factionUnitList });
     console.log('sent faction unit list', factionUnitList)
@@ -151,35 +151,57 @@ app.get('/api/factions/:faction/unit', async (req, res) => {
 
 app.put('/api/factions/:faction/unit/:unit', async (req, res) => {
   const unitName = req.params.unit;
-  const { selectedMeleeWeapons, selectedRangedWeapons } = req.body;
-
+  const { selectedMeleeWeapons:selectedMeleeWeaponsSet, selectedRangedWeapons:selectedRangedWeaponsSet, pointCost } = req.body;
+  const selectedMeleeWeapons = Array.from(selectedMeleeWeaponsSet);
+  const selectedRangedWeapons = Array.from(selectedRangedWeaponsSet);
   try {
-    // Find weapons by name
-    const meleeWeapons = await MeleeWeapon.find({ name: { $in: selectedMeleeWeapons } }).exec();
-    const rangedWeapons = await RangedWeapon.find({ name: { $in: selectedRangedWeapons } }).exec();
+    // Initialize an object to hold the update fields
+    let updateFields = {};
 
-    // Extract weapon IDs
-    const meleeWeaponIds = meleeWeapons.map(weapon => weapon._id);
-    const rangedWeaponIds = rangedWeapons.map(weapon => weapon._id);
-
-    // Update the unit
-    const updatedUnit = await Unit.findOneAndUpdate(
-      { name: unitName },
-      { meleeWeapons: meleeWeaponIds, rangedWeapons: rangedWeaponIds },
-      { new: true } // Return the updated document
-    ).exec();
-
-    if (!updatedUnit) {
-      return res.status(404).send('Unit not found');
+    // Only add to updateFields if the value is not empty or null
+    if (selectedMeleeWeapons && selectedMeleeWeapons.length > 0) {
+      const meleeWeapons = await MeleeWeapon.find({ name: { $in: selectedMeleeWeapons } }).exec();
+      const meleeWeaponIds = meleeWeapons.map(weapon => weapon._id);
+      updateFields.meleeWeapons = meleeWeaponIds;
     }
 
-    res.send(updatedUnit);
+    if (selectedRangedWeapons && selectedRangedWeapons.length > 0) {
+      const rangedWeapons = await RangedWeapon.find({ name: { $in: selectedRangedWeapons } }).exec();
+      const rangedWeaponIds = rangedWeapons.map(weapon => weapon._id);
+      updateFields.rangedWeapons = rangedWeaponIds;
+    }
+
+    if (pointCost !== undefined && pointCost !== null && pointCost !== 0) {
+      updateFields.points = pointCost;
+    }
+
+    // Check if there are fields to update
+    if (Object.keys(updateFields).length > 0) {
+      try {
+        const result = await Unit.findOneAndUpdate(
+          { name: unitName },
+          updateFields,
+          { new: true }
+        ).exec();
+      
+        if (result) {
+          res.status(200).json({ message: "Unit updated successfully" });
+        } else {
+          res.status(404).json({ message: "Unit not found" });
+        }
+      } catch (error) {
+        res.status(500).json({ message: "An error occurred during the update", error: error.message });
+      }
+    } else {
+      // No valid fields to update
+      res.status(400).json({ message: "No valid fields provided for update" });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server error');
+    res.status(500).json({error: error});
   }
-
 });
+
 
 app.get('/api/factions', async (req,res) => {
   try {

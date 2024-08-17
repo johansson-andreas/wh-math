@@ -9,7 +9,7 @@ const MeleeWeaponForm = () => {
     weaponSkill: '',
     strength: '',
     armorPenetration: '',
-    damage: '', // Fixed field name
+    damage: '', 
     keywords: []
   });
 
@@ -37,7 +37,7 @@ const MeleeWeaponForm = () => {
         weaponSkill: values[2] || '',
         strength: values[3] || '',
         armorPenetration: values[4] || '',
-        damage: values[5] || '1' // Fixed field name
+        damage: values[5] || '1' 
       });
     } else {
       // Fallback regex pattern if keywords are not present
@@ -66,7 +66,6 @@ const MeleeWeaponForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your submit logic here, such as making an API call
     const response = await axios.post('http://localhost:5000/api/weapons/melee', { formData })
     console.log(response.data);
   };

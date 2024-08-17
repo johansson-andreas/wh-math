@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
-import AddNewDataComponent from './components/AddNewDataComponent.js';
-import CalcWeaponComponent from './components/CalcWeaponComponent.js';
+import AddNewDataComponent from './Tabs/AddNewDataComponent.js';
+import CalcWeaponComponent from './Tabs/CalcWeaponComponent.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Tab from 'react-bootstrap/Tab';
@@ -16,10 +16,7 @@ function App() {
   }
 
   const renderCalcDamage = () => {
-
-    return <div>Placeholder</div>
-
-
+    return <CalcWeaponComponent />
   }
 
 
