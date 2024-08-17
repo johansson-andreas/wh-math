@@ -1,0 +1,51 @@
+.rangedWeaponsDiv
+{
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+}
+.weaponsDiv
+{
+    display: flex;
+    height: 100%;
+}
+.linkForm
+{
+    height: 100%;
+}
+.rangedWeaponsSelect
+{
+    height: inherit;
+}
+.rangedWeaponsEntry
+{
+    line-height: normal;
+    font-size: smaller;
+}
+.unitDiv {
+    display: flex;
+    flex-direction: column;
+
+}
+.dataDiv
+{
+    display: flex;
+}
+.dataDiv > * > *
+{
+    padding: 1%;
+}
+.dataDiv > *
+{
+    padding: 1%;
+}
+.unitSelect
+{
+    height: 100%;
+}
+.topButtons
+{
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+}
