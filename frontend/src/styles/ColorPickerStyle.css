@@ -1,0 +1,33 @@
+/* ColorGrid.css */
+
+.color-visualizer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .hex-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 35px); /* 10 columns of hexagons */
+    grid-auto-rows: 35px;
+    gap: 5px;
+    position: relative;
+  }
+  
+
+  .grayscale-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 25px); /* 4 columns for grayscale */
+    gap: 5px;
+  }
+  
+  .grayscale-cell {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+  }
+  .inputColor
+  {
+    width: 70px;
+    height: 35px;
+  }

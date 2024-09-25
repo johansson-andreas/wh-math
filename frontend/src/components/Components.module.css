@@ -1,33 +1,155 @@
-
-.unitEntry
-{
+.unitEntry {
     line-height: normal;
     font-size: smaller;
     margin: 1px;
-    background-color:rgb(190, 214, 235) ;
+    background-color: rgb(190, 214, 235);
     border-radius: 10px;
     padding: 3px;
     height: 25px;
     user-select: none;
 }
 
-.unitList {
+.unitList,
+.attackListBody {
     padding: 3px;
-    min-width: 400px;
-    max-height: 70vh;
+    min-width: 300px;
+    max-height: 100%;
     overflow: auto;
     margin: 2px;
     display: flex;
     flex-direction: column;
-    width:15%;
+    width: 15%;
     height: 100%;
+    max-width: 300px;
 
 }
-.unitSelected
-{
+
+.attackListBody {
+    gap: 5px;
+}
+
+.unitSelected {
     background-color: rgb(146, 233, 47);
 }
-.dropDownMainDiv
-{
+
+.dropDownMainDiv {
     width: 100%;
+}
+
+.attackerUnit {
+    background-color: rgb(155, 201, 241);
+    text-wrap: nowrap;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.unitNameTitle {
+    text-align: center;
+    font-size: small;
+}
+
+.meleeWeaponsTitle {
+    text-align: center;
+    font-size: small;
+}
+
+
+
+.meleeWeapons {
+    display: grid;
+    grid-auto-columns: 50%;
+    grid-template-areas: "weapon weapon";
+    font-size: small;
+}
+
+.weaponEntry {
+    background-color: rgb(119, 119, 252);
+    border-radius: 10px;
+    padding: 4px;
+    line-height: initial;
+    display: flex;
+    align-items: center; /* Vertically center the input with the text */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflowed content */
+    text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+    width: 100%; /* Ensure the label respects its container's width */
+  }
+
+  .weaponName {
+    flex-grow: 1; /* Allow the text to take up remaining space */
+    overflow: hidden; /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add ellipsis to the overflowed text */
+    margin-right: 8px; /* Add some space between the text and the input */
+    font-size: small;
+  }
+.calcAttackerPanel
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.calcAttackerPanel > * > *
+{
+
+}
+
+.calcAttackerWeaponsDiv
+{
+    flex-direction: column;
+    display: flex;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 100%;
+    grid-column: 2;
+    user-select: none;
+
+}
+.calcAttackerUnitDiv {
+    border: 1px solid black;
+    border-bottom: 0;
+    display: grid;
+    grid-template-areas: "name data";
+    grid-template-rows: auto auto;
+    grid-template-columns: min-content 1fr;
+    background-color: rgb(190, 214, 235);
+    grid-area: attackers;
+}
+.calcAttackerUnitDivName
+{
+    text-wrap: auto;
+    border-bottom: 1px solid black;
+    grid-column: 1;
+    padding: 3px;
+    user-select: none;
+
+}
+.calcAttackerWeaponDiv
+{
+    border-bottom: 1px solid black;
+    margin: -1px;
+    padding: 3px;
+}
+.calcUnitDiv
+{
+    font-size: small;
+    display: grid;
+    grid-template-areas: 
+    ". defenders"
+    "attackers defenders";
+    grid-template-rows: 20px 1fr;
+}
+.calcDefenderUnitDiv
+{
+    display: flex;
+    grid-area:defenders;
+}
+.defenderTitle
+{
+
+}
+.calcs
+{
+    grid-row: 2;
 }

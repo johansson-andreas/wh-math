@@ -107,6 +107,10 @@ const UnitWeaponLinkForm = () => {
     initializeData();
   }, []);
 
+  const unitClickEvent = (unit) => {
+    setSelectedUnit(unit);
+  }
+
 
   return (
     <div className={styles.linkForm}>
@@ -116,7 +120,7 @@ const UnitWeaponLinkForm = () => {
         Points cost: <input type='number' onChange={handleCostChange} className={styles.factionDropDown}/>
 
       <div className={styles.dataDiv}>
-          <UnitList unitList={unitList} setSelectedUnit={setSelectedUnit} selectedUnit={selectedUnit}/>
+          <UnitList unitList={unitList} clickEvent={unitClickEvent} selectedUnit={selectedUnit}/>
           <div className={styles.rangedWeaponsDiv}>
             Ranged Weapons:
             <div className={styles.rangedWeaponList}>

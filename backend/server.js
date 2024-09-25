@@ -202,7 +202,6 @@ app.put('/api/factions/:faction/unit/:unit', async (req, res) => {
   }
 });
 
-
 app.get('/api/factions', async (req,res) => {
   try {
     const result = await Unit.aggregate([
@@ -226,6 +225,24 @@ app.get('/api/factions', async (req,res) => {
     res.json(error);
   }
 })
+
+app.get('/api/factions/:faction/unit/:unit', async (req, res) => {
+  const factionName = req.params.faction;
+  const unit = req.params.unit;
+
+  try {
+
+    const unitDetails = await Unit.find({name:unit}).populate('rangedWeapons').populate('meleeWeapons').exec()
+    res.json({ unitDetails });
+    console.log('sent unit details', unitDetails)
+
+  }
+  catch (error) {
+    console.log(error)
+    res.send(error); 
+  }
+
+});
 
 
 

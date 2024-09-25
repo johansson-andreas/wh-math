@@ -1,17 +1,14 @@
 .mainDiv {
-    height: 80vh;
+    display: flex;
 }
 
 .attackerDiv {
     display: grid;
     grid-template-areas:
-        "button title"
-        "content content";
-    grid-template-columns: repeat(2, 10%);
-    /* Create 3 equal-width columns */
-    grid-template-rows: auto 1fr;
-    /* Two rows: one for buttons, one for main content */
-
+        "title ."
+        "content attacker";
+        grid-template-columns: min-content min-content;
+        grid-template-rows: min-content 1fr;    /* First row auto height, second row takes remaining space */
 }
 
 .attackerFactionButton {
@@ -29,4 +26,8 @@
     height: 100%;
     align-content: end;
     text-decoration: underline;
+}
+
+.attackList {
+    grid-area: attacker;
 }
