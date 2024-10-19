@@ -151,9 +151,12 @@ app.get('/api/factions/:faction/unit', async (req, res) => {
 
 app.put('/api/factions/:faction/unit/:unit', async (req, res) => {
   const unitName = req.params.unit;
+  console.log(req.body)
   const { selectedMeleeWeapons:selectedMeleeWeaponsSet, selectedRangedWeapons:selectedRangedWeaponsSet, pointCost } = req.body;
+
   const selectedMeleeWeapons = Array.from(selectedMeleeWeaponsSet);
   const selectedRangedWeapons = Array.from(selectedRangedWeaponsSet);
+  console.log(selectedMeleeWeapons)
   try {
     // Initialize an object to hold the update fields
     let updateFields = {};

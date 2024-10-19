@@ -136,8 +136,8 @@
     font-size: small;
     display: grid;
     grid-template-areas: 
-    ". defenders"
-    "attackers defenders";
+    ". header"
+    "math .";
     grid-template-rows: 20px 1fr;
 }
 .calcDefenderUnitDiv

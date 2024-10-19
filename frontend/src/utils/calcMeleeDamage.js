@@ -1,6 +1,6 @@
 import { addWeaponKeyword, addKeywordsToWeapon } from './addWeaponKeywords.js'
 
-export const calcRangedDamage = (weapon, defender) => {
+export const calcMeleeDamage = (weapon, defender) => {
   const iterations = 10000;
   let totalDamage = 0;
   let totalHitHits = 0;
@@ -22,7 +22,7 @@ export const calcRangedDamage = (weapon, defender) => {
   console.log('weapon: ', weapon.name)
   console.log('roll to wound', hitToWound)
   console.log('rollToSave', rollToSave)
-  if (updatedWeapon.ballisticSkill || updatedWeapon.torrent) {
+  if (updatedWeapon.weaponSkill || updatedWeapon.torrent) {
     for (let i = 0; i < iterations; i++) {
       //HIT ROLLS
       const hits = hitRolls(updatedWeapon);
@@ -67,7 +67,7 @@ const hitRolls = (weapon) => {
     attacks += parseInt(weapon.rapidfire)
   }
 
-  let rollToHit = parseInt(weapon.ballisticSkill[0]);
+  let rollToHit = parseInt(weapon.weaponSkill[0]);
     if(attacks[0] == 'D') attacks = rollDie();
   
   for (let a = 0; a < attacks; a++) {

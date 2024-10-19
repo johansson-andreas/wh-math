@@ -74,14 +74,17 @@ const UnitWeaponLinkForm = () => {
     console.log(selectedMeleeWeapons, selectedRangedWeapons, selectedUnit)
 
     const updatedWeaponList = {
-      selectedMeleeWeapons,
-      selectedRangedWeapons,
-      pointCost
-    }
+      selectedMeleeWeapons: Array.from(selectedMeleeWeapons), // Convert Set to Array
+      selectedRangedWeapons: Array.from(selectedRangedWeapons), // Convert Set to Array
+      pointCost: pointCost
+    };
+    
+    console.log(updatedWeaponList)
     try{
     const response = await axios.put(`http://localhost:5000/api/factions/${selectedFaction}/unit/${selectedUnit}`, updatedWeaponList);
  
     if (response.status === 200) {
+      console.log(response.data.message)
       setResponseMessage(response.data.message);
     }
   } catch (error) {
