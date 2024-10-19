@@ -8,8 +8,8 @@
   
   .hex-grid {
     display: grid;
-    grid-template-columns: repeat(20, 35px); /* 10 columns of hexagons */
-    grid-auto-rows: 35px;
+    grid-template-columns: repeat(225, 5px); /* 10 columns of hexagons */
+    grid-auto-rows: 5px;
     gap: 5px;
     position: relative;
   }
@@ -22,8 +22,8 @@
   }
   
   .grayscale-cell {
-    width: 25px;
-    height: 25px;
+    width: 5px;
+    height: 5px;
     border: 1px solid black;
   }
   .inputColor
