@@ -23,7 +23,17 @@
     max-width: 300px;
 
 }
-
+.attackerTable {
+    table-layout: fixed;
+    width: 100%; /* Optional: Ensures the table takes the full width of its container */
+    border-collapse: collapse; /* Optional: Ensures no spacing between cells */
+  }
+  .attackerCell {
+    width: 1fr; /* Ensures equal cell widths */
+    text-align: center; /* Optional: Centers text in each cell */
+    padding: 8px; /* Optional: Adds spacing inside cells */
+    border: 1px solid #ddd; /* Optional: Adds borders for clarity */
+  }
 .attackListBody {
     gap: 5px;
 }

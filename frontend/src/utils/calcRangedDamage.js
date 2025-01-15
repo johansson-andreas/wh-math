@@ -7,6 +7,8 @@ export const calcRangedDamage = (weapon, defender) => {
   let totalWoundHits = 0;
   let totalSaves = 0;
 
+  console.log(defender)
+
   const updatedWeapon = addKeywordsToWeapon(weapon);
   console.log(updatedWeapon);
 
@@ -68,7 +70,7 @@ const hitRolls = (weapon) => {
   }
 
   let rollToHit = parseInt(weapon.ballisticSkill[0]);
-    if(attacks[0] == 'D') attacks = rollDie();
+  if(attacks[0] == 'D') attacks = rollDie();
   
   for (let a = 0; a < attacks; a++) {
     const roll = rollDie();
@@ -137,27 +139,46 @@ const woundRolls = (rollToWound, hits) => {
 
 const saveRolls = (weapon, rollToSave, wounds, defender) => {
   let damage = 0;
-  let savedAmount = 0
+  let savedAmount = 0;
+
   for (let a = 0; a < wounds; a++) {
     let damageHit = 0;
     const roll = rollDie();
 
-    if (roll == 1) {
-      if(weapon.damage[0] == 'D') damageHit += rollNDie(weapon.damage[1])
-      else damageHit += parseInt(weapon.damage);
-      if(weapon.melta) damageHit += weapon.melta
-
-    } else if (roll < rollToSave) {
-      if(weapon.damage[0] == 'D') damageHit += rollNDie(weapon.damage[1])
-      else damageHit += parseInt(weapon.damage);
-      if(weapon.melta) damageHit += weapon.melta
-
+    if (roll === 1 || roll < rollToSave) {
+      damageHit += parseDamage(weapon.damage);
+      if (weapon.melta) damageHit += weapon.melta;
     } else {
-      savedAmount++
+      savedAmount++;
     }
+
+    // Cap damage to the defender's remaining wounds
     damage += Math.min(damageHit, defender.wounds);
   }
-  return {damage, savedAmount};
+
+  return { damage, savedAmount };
+};
+
+const parseDamage = (damageString) => {
+  // Check if the damage is static (just a number)
+  if (!isNaN(damageString)) {
+    return parseInt(damageString, 10);
+  }
+
+  // Check for range-based or mixed damage formats
+  const regex = /D(\d+)(\+(\d+))?/; // Matches formats like D6, D3+2, etc.
+  const match = damageString.match(regex);
+
+  if (match) {
+    const diceSides = parseInt(match[1], 10); // Number of sides on the die (e.g., 6 for D6)
+    const flatBonus = match[3] ? parseInt(match[3], 10) : 0; // Flat bonus, if present
+    const rolledValue = rollNDie(diceSides); // Roll the die
+    return rolledValue + flatBonus;
+  }
+
+  // If the damage format is invalid, return 0 or throw an error
+  console.error(`Invalid damage format: ${damageString}`);
+  return 0;
 };
 
 const calculateExpectedValueAndVariance = (
